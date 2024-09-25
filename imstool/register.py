@@ -22,13 +22,12 @@
     _______________________________________________________________________
 """
 
-import imscc
-import imscp
-import mitocw
-import moodle
-import bb
-import webct
-import webctvista
+from . import imscc
+from . import imscp
+from . import moodle
+from . import bb
+from . import webct
+from . import webctvista
 
 __author__ = 'Brent Lambert'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -42,7 +41,6 @@ __email__ = 'brent@enpraxis.net'
 readers = [
     (imscc.id, imscc.description),
     (imscp.id, imscp.description),
-    (mitocw.id, mitocw.description),
     (moodle.id, moodle.description),
     (bb.id, bb.description),
     (webct.id, webct.description),
@@ -52,7 +50,6 @@ readers = [
 readerclass = {
     imscc.id:imscc.IMSCCReader,
     imscp.id:imscp.IMSCPReader,
-    mitocw.id:mitocw.IMSMITReader,
     moodle.id:moodle.MoodleReader,
     bb.id:bb.IMSBBReader,
     webct.id:webct.IMSWebCTReader,
@@ -62,13 +59,11 @@ readerclass = {
 writers = [
     (imscc.id, imscc.description),
     (imscp.id, imscp.description),
-    (mitocw.id, mitocw.description),
     (moodle.id, moodle.description),
 ]
 
 writerclass = {
     imscc.id:imscc.IMSCCWriter,
     imscp.id:imscp.IMSCPWriter,
-    mitocw.id:mitocw.IMSMITWriter,
     moodle.id:moodle.MoodleWriter,
 }

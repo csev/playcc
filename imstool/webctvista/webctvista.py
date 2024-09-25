@@ -1,5 +1,5 @@
 from imstool.base import IMSReader
-from webctvistareader import IMSWebCTVistaReader
+from .webctvistareader import IMSWebCTVistaReader
 from imstool.errors import ManifestError, manifestNotFound
 
 

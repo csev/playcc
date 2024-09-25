@@ -26,7 +26,7 @@
 """
 
 from imstool.base import IMSReader, BaseWriter
-from mbreader import MBReader
+from .mbreader import MBReader
 from imstool.errors import ManifestError
 import re
 
@@ -47,7 +47,7 @@ class MoodleReader(IMSReader):
         mbreader = MBReader()
         manifest = self.readManifest(zf, manifestfile='moodle.xml')
         if not manifest:
-            raise ManifestError, 'Could not locate manifest file.'
+            raise ManifestError('Could not locate manifest file.')
         doc = mbreader.parseManifest(manifest)
         mods = mbreader.readMods(doc)
         visibleids = mbreader.readSections(doc)
@@ -61,7 +61,7 @@ class MoodleReader(IMSReader):
                 if modid:
                     mid = 'resource-' + modid
                     objDict[mid] = metadata
-                    if metadata.has_key('file') and metadata['file']:
+                    if 'file' in metadata and metadata['file']:
                         fn = metadata['file'].split('/')[-1]
                     else:
                         fn = modid
@@ -82,7 +82,7 @@ class MoodleReader(IMSReader):
                     objDict[mid]['items'] = {}
                     objDict[mid]['itemorder'] = []
                     for q in question_ids:
-                        if q in questions.keys():
+                        if q in list(questions.keys()):
                             objDict[mid]['items'][q] = questions[q]
                             objDict[mid]['itemorder'].append(q)
         if objManager:

@@ -22,9 +22,9 @@
     _______________________________________________________________________
 """
 
-from register import readers, readerclass, writers, writerclass
-from errors import ManifestError
-from base import BaseObjectManager
+from .register import readers, readerclass, writers, writerclass
+from .errors import ManifestError
+from .base import BaseObjectManager
 
 __author__ = 'Brent Lambert'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -39,7 +39,7 @@ def importPackage(zipfile, packagetype, objManager):
     preader = readerclass[packagetype]()
     try:
         preader.readPackage(zipfile, objManager)
-    except ManifestError, e:
+    except ManifestError as e:
         return e
     return None
     

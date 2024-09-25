@@ -25,7 +25,7 @@
     _______________________________________________________________________
 """
 
-from webct import IMSWebCTReader
+from .webct import IMSWebCTReader
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

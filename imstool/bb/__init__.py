@@ -25,7 +25,7 @@
     _______________________________________________________________________
 """
 
-from bboard import IMSBBReader
+from .bboard import IMSBBReader
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

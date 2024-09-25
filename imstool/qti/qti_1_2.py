@@ -102,7 +102,7 @@ class QTIParser1_2:
                             elif 'cc_weighting' == label:
                                 data['questionscore'] = entry
                                 
-        if not data.has_key('questiontype'):
+        if 'questiontype' not in data:
             data['questiontype'] = 'Unknown'
         
 
@@ -156,7 +156,7 @@ class QTIParser1_2:
                 if title and title in ['CorrectResponse', 'Correct']:
                     veq = c.getElementsByTagName('varequal')
                     if veq:
-                        if data.has_key('cresponse'):
+                        if 'cresponse' in data:
                             data['cresponse'].append(self.getTextValue(veq[0]))
                         else:
                             data['cresponse'] = [self.getTextValue(veq[0])]

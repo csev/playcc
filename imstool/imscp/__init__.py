@@ -25,7 +25,7 @@
     _______________________________________________________________________
 """
 
-from imscp import IMSCPReader, IMSCPWriter
+from .imscp import IMSCPReader, IMSCPWriter
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

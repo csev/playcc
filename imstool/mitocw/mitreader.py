@@ -27,8 +27,8 @@
 
 from xml.dom import minidom
 from imstool.errors import ManifestError
-from configmit import LOM_IMSCP_namespace, ADLCP_namespace, OCW_namespace, LOM_namespace
-from BeautifulSoup import BeautifulSoup
+from .configmit import LOM_IMSCP_namespace, ADLCP_namespace, OCW_namespace, LOM_namespace
+from bs4 import BeautifulSoup
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -149,8 +149,8 @@ class MITReader(object):
                     title = self.getTextValue(langstring_nodes[0])
                     if title:
                         md['title'] = title
-            if not md.has_key('title'):
-                raise ManifestError, 'Required tag "title" missing in lom/general metadata section for resource.'
+            if 'title' not in md:
+                raise ManifestError('Required tag "title" missing in lom/general metadata section for resource.')
             language_nodes = gen_node.getElementsByTagNameNS(LOM_namespace, 'language')
             if language_nodes:
                 lang = self.getTextValue(language_nodes[0])

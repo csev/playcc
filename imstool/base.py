@@ -74,11 +74,11 @@ class IMSReader(BaseReader):
             'text/x-rst', 
             'text/structured'
             ]
-        if item.has_key('type') and item['type']:
+        if 'type' in item and item['type']:
             result = item['type']
-        elif item.has_key('Format') and item['Format'] in docmimetypes:
+        elif 'Format' in item and item['Format'] in docmimetypes:
             result = 'Document'
-        elif item.has_key('Format') and 'image' in item['Format']:
+        elif 'Format' in item and 'image' in item['Format']:
             result = 'Image'
         else:
             mimetype = guess_type(fn)

@@ -27,7 +27,7 @@
 
 from xml.dom import minidom
 from imstool.errors import ManifestError
-from configcc import LOM_namespace, LOM_IMSCC_namespace, WL_namespace
+from .configcc import LOM_namespace, LOM_IMSCC_namespace, WL_namespace
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -155,8 +155,8 @@ class CCReader(object):
                     title = self.getTextValue(langstring_nodes[0])
                     if title:
                         md['title'] = title
-            if not md.has_key('title'):
-                raise ManifestError, 'Required tag "title" missing in lom/general metadata section for resource.'
+            if 'title' not in md:
+                raise ManifestError('Required tag "title" missing in lom/general metadata section for resource.')
             language_nodes = metadata.getElementsByTagNameNS(LOM_namespace, 'language')
             if language_nodes:
                 lang = self.getTextValue(language_nodes[0])
@@ -298,11 +298,11 @@ class CCReader(object):
 
         value = self.getVcardValue('BEGIN', [textlines[0]])
         if 'VCARD' != value.strip().upper():
-            raise ManifestError, 'Missing VCARD BEGIN tag'
+            raise ManifestError('Missing VCARD BEGIN tag')
 
         value = self.getVcardValue('END', [textlines[-1]])
         if 'VCARD' != value.strip().upper():
-            raise ManifestError, 'Missing VCARD END tag'
+            raise ManifestError('Missing VCARD END tag')
 
         name = self.getVcardValue('FN', textlines)
         email = self.getVcardValue('EMAIL;INTERNET', textlines)

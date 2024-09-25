@@ -27,7 +27,7 @@
 
 from imstool.base import IMSReader, BaseWriter
 from imstool.qti import QTIParser1_2
-from ccreader import CCReader
+from .ccreader import CCReader
 from imstool.errors import ManifestError
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
@@ -47,7 +47,7 @@ class IMSCCReader(IMSReader):
         ccreader = CCReader()
         manifest = self.readManifest(zf)
         if not manifest:
-            raise ManifestError, 'Could not locate manifest file.'
+            raise ManifestError('Could not locate manifest file.')
         doc = ccreader.parseManifest(manifest)
         objDict['package'] = {}
         orgs = ccreader.readOrganizations(doc)
@@ -93,11 +93,11 @@ class IMSCCReader(IMSReader):
                     if y == reshref or len(files) == 1:
                         objDict[hash] = metadata
                         # If it is listed in the org section
-                        if orgs.has_key(resid):
+                        if resid in orgs:
                             objDict[hash]['position'] = orgs[resid][0]
                             objDict[hash]['excludeFromNav'] = False
                             # Use 'and' as opposed to 'or' to avoid KeyError
-                            if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                            if not ('title' in objDict[hash] and objDict[hash]['title']):
                                 objDict[hash]['title'] = orgs[resid][1]
                         else:
                             objDict[hash]['excludeFromNav'] = True
@@ -111,7 +111,7 @@ class IMSCCReader(IMSReader):
                         objDict[hash]['type'] = self.determineType(objDict[hash], y)
                     # Add to all files
                     id = self.createIdFromFile(y)
-                    if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                    if not ('title' in objDict[hash] and objDict[hash]['title']):
                         objDict[hash]['title'] = id
                     objDict[hash]['id'] = id
                     objDict[hash]['path'] = self.createPathFromFile(y) 

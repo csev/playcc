@@ -25,7 +25,7 @@
     _______________________________________________________________________
 """
 
-from mitocw import IMSMITReader, IMSMITWriter
+from .mitocw import IMSMITReader, IMSMITWriter
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

@@ -27,8 +27,8 @@
 
 from xml.dom import minidom
 from imstool.errors import ManifestError
-from urlparse import urlparse
-from BeautifulSoup import BeautifulSoup
+from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

@@ -22,7 +22,7 @@
     _______________________________________________________________________
 """
 
-from qti_1_2 import QTIParser1_2
+from .qti_1_2 import QTIParser1_2
 
 __author__ = 'Brent Lambert'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

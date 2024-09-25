@@ -26,7 +26,7 @@
 """
 
 from imstool.base import IMSReader, BaseWriter
-from bbreader import BBReader
+from .bbreader import BBReader
 from imstool.errors import ManifestError, manifestNotFound
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
@@ -46,7 +46,7 @@ class IMSBBReader(IMSReader):
         bbreader = BBReader()
         manifest = self.readManifest(zf)
         if not manifest:
-            raise ManifestError, manifestNotFound
+            raise ManifestError(manifestNotFound)
         doc = bbreader.parseManifest(manifest)
         tocpages = []
         orgs = bbreader.readOrganizations(doc)
@@ -60,7 +60,7 @@ class IMSBBReader(IMSReader):
                 # read the data file
                 if bbfile:
                     metadata = self._processFile(bbfile, source, bbreader)
-                if metadata.has_key('text') and metadata['text']:
+                if 'text' in metadata and metadata['text']:
                     doctext = self._processText(metadata['text'], bbreader, bbase)
                 # Handle Files
                 files = bbreader.readFiles(x, bbase)
@@ -72,14 +72,14 @@ class IMSBBReader(IMSReader):
                 if entries:
                     filetoc = bbreader.createTocPage(entries)
             # Handle links
-            if metadata.has_key('bbtype') and metadata['bbtype'] == 'Link':
+            if 'bbtype' in metadata and metadata['bbtype'] == 'Link':
                 hash = resid
                 objDict[hash] = metadata
                 filepath = ''
                 id = resid + '.link'
                 excludeFromNav = True
                 ptype = metadata['bbtype']
-                if orgs.has_key(resid):
+                if resid in orgs:
                     title = bbreader.runFilters(orgs[resid],'striphtml')
                 else:
                     title = id
@@ -92,24 +92,24 @@ class IMSBBReader(IMSReader):
                 excludeFromNav = True
                 ptype = 'Document'
                 id = resid + '.html'
-                if orgs.has_key(resid):
+                if resid in orgs:
                     title = bbreader.runFilters(orgs[resid],'striphtml')
                 else:
                     title = id
                 # It's a folder object:
-                isFolder = metadata.has_key('bbtype') and metadata['bbtype'] == 'Folder'
+                isFolder = 'bbtype' in metadata and metadata['bbtype'] == 'Folder'
                 if isFolder or restype == 'course/x-bb-coursetoc':
                     tocpages.append(resid)
                 # It's a table of contents object
                 if restype == 'course/x-bb-coursetoc':
-                    if orgs.has_key(resid):
+                    if resid in orgs:
                         excludeFromNav = False
                         orgstitle = orgs[resid].split('.')
                         # Rewrite label tag
                         if len(orgstitle) > 1 and orgstitle[-1] == 'label':
                             title = re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', ' \\1', orgs[resid].split('.')[1])
                 text = doctext
-                if type(filetoc) == type(u''):
+                if type(filetoc) == type(''):
                     text += filetoc.encode('utf-8')
                 self.applyCoreMetadata(objDict[hash], id, filepath, excludeFromNav, ptype, title, text=text)
         # Build table of contents pages
@@ -126,7 +126,7 @@ class IMSBBReader(IMSReader):
         metadata['path'] = path
         metadata['excludeFromNav'] = excludeFromNav
         metadata['type'] = type
-        if not (metadata.has_key('title') and metadata['title']):
+        if not ('title' in metadata and metadata['title']):
             metadata['title'] = title
         if file:
             metadata['file'] =  file
@@ -141,7 +141,7 @@ class IMSBBReader(IMSReader):
 
     def _processText(self, mtext, bbreader, bbase):
         """ Process the text and return """
-        if type(mtext) == type(u''):
+        if type(mtext) == type(''):
             mtext = mtext.encode('utf-8')
         ptext = unquoteHTML(mtext)
         utils = getUtility(ISiteRoot).plone_utils
@@ -157,7 +157,7 @@ class IMSBBReader(IMSReader):
         tocitems = bbreader.readTocItem(doc, pageid)
         entries = []
         for titem in tocitems:
-            if objDict.has_key(titem):
+            if titem in objDict:
                 met = objDict[titem]
                 path = met['path']
                 if path:
@@ -166,9 +166,9 @@ class IMSBBReader(IMSReader):
                     linkpath = objDict[titem]['id']
                 entries.append((linkpath, met['title']))
         if entries:
-            if objDict[pageid].has_key('text') and objDict[pageid]['text']:
+            if 'text' in objDict[pageid] and objDict[pageid]['text']:
                 gtext = objDict[pageid]['text']
-                if type(gtext) == type(u''):
+                if type(gtext) == type(''):
                     gtext = gtext.encode('utf-8')
                 objDict[pageid]['text'] = bbreader.createTocPage(entries).encode('utf-8') + gtext
             else:

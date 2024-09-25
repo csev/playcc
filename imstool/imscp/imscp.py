@@ -27,7 +27,7 @@
 
 from imstool.base import IMSReader, BaseWriter
 from imstool.errors import ManifestError, manifestNotFound
-from cpreader import CPReader
+from .cpreader import CPReader
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -47,7 +47,7 @@ class IMSCPReader(IMSReader):
         cpreader = CPReader()
         manifest = self.readManifest(zf)
         if not manifest:
-            raise ManifestError, manifestNotFound
+            raise ManifestError(manifestNotFound)
         doc = cpreader.parseManifest(manifest)
         objDict['package'] = cpreader.readPackageMetadata(doc)
         orgs = cpreader.readOrganizations(doc)
@@ -69,11 +69,11 @@ class IMSCPReader(IMSReader):
                     if y == reshref or len(files) == 1:
                         objDict[hash] = metadata
                         # If it is listed in the org section
-                        if orgs.has_key(resid):
+                        if resid in orgs:
                             objDict[hash]['position'] = orgs[resid][0]
                             objDict[hash]['excludeFromNav'] = False
                             # Use 'and' as opposed to 'or' to avoid KeyError
-                            if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                            if not ('title' in objDict[hash] and objDict[hash]['title']):
                                 objDict[hash]['title'] = orgs[resid][1]
                         else:
                             objDict[hash]['excludeFromNav'] = True
@@ -88,7 +88,7 @@ class IMSCPReader(IMSReader):
                     # Add to all files
                     id = self.createIdFromFile(y)
                     objDict[hash]['id'] = id
-                    if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                    if not ('title' in objDict[hash] and objDict[hash]['title']):
                         objDict[hash]['title'] = id
                     objDict[hash]['path'] = self.createPathFromFile(y)
 

@@ -25,7 +25,7 @@
     _______________________________________________________________________
 """
 
-from moodle import MoodleReader, MoodleWriter
+from .moodle import MoodleReader, MoodleWriter
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

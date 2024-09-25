@@ -22,7 +22,7 @@
     _______________________________________________________________________
 """
 
-from imscc import IMSCCReader, IMSCCWriter
+from .imscc import IMSCCReader, IMSCCWriter
 
 __author__ = 'Brent Lambert'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

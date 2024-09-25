@@ -27,7 +27,7 @@
 
 from xml.dom import minidom
 from imstool.errors import ManifestError, manifestNotFound
-from configwebct import LOM_WEBCT_namespace 
+from .configwebct import LOM_WEBCT_namespace 
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'

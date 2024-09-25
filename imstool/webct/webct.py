@@ -26,7 +26,7 @@
 """
 
 from imstool.base import IMSReader, BaseWriter
-from webctreader import WebCTReader
+from .webctreader import WebCTReader
 from imstool.errors import ManifestError, manifestNotFound
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
@@ -46,13 +46,13 @@ class IMSWebCTReader(IMSReader):
         webctreader = WebCTReader()
         manifest = self.readManifest(zf)
         if not manifest:
-            raise ManifestError, manifestNotFound
+            raise ManifestError(manifestNotFound)
         doc = webctreader.parseManifest(manifest)
         manifests = webctreader.readManifests(doc)
         for m in manifests:
             orgs =[]
             manifestmetadata = webctreader.readPackageMetadata(m)
-            if manifestmetadata.has_key('webcttype') and manifestmetadata['webcttype'] == 'Course':
+            if 'webcttype' in manifestmetadata and manifestmetadata['webcttype'] == 'Course':
                 objDict['package'] = manifestmetadata
             else:
                 orgs = webctreader.readOrganizations(m)
@@ -61,7 +61,7 @@ class IMSWebCTReader(IMSReader):
                     resid, restype, reshref = webctreader.readResourceAttributes(x)
                     files = webctreader.readFiles(x)
                     # If the type is a link
-                    if manifestmetadata.has_key('webcttype') and manifestmetadata['webcttype'] == 'URL':
+                    if 'webcttype' in manifestmetadata and manifestmetadata['webcttype'] == 'URL':
                         for y in files:
                             hash = resid + y
                             objDict[hash] = manifestmetadata
@@ -81,10 +81,10 @@ class IMSWebCTReader(IMSReader):
                                 objDict[hash] = manifestmetadata
                             if len(files) == 1:
                                 # If it is listed in the org section
-                                if orgs.has_key(resid):
+                                if resid in orgs:
                                     objDict[hash]['excludeFromNav'] = False
                                     # Use 'and' as opposed to 'or' to avoid KeyError
-                                    if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                                    if not ('title' in objDict[hash] and objDict[hash]['title']):
                                         objDict[hash]['title'] = orgs[resid]
                                 else:
                                     objDict[hash]['excludeFromNav'] = True
@@ -98,7 +98,7 @@ class IMSWebCTReader(IMSReader):
                             # Add to all files
                             id = self.createIdFromFile(y)
                             objDict[hash]['id'] = id
-                            if not (objDict[hash].has_key('title') and objDict[hash]['title']):
+                            if not ('title' in objDict[hash] and objDict[hash]['title']):
                                 objDict[hash]['title'] = id
                             objDict[hash]['path'] = self.createPathFromFile(y)
         if objManager:

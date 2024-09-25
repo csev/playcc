@@ -26,11 +26,11 @@
 """
 
 from xml.dom import minidom
-from urlparse import urlparse
+from urllib.parse import urlparse
 from imstool.errors import ManifestError
-from configbb import LOM_BB_namespace, XML_namespace, EMBEDDED_STRING
+from .configbb import LOM_BB_namespace, XML_namespace, EMBEDDED_STRING
 import re
-import htmlentitydefs
+import html.entities
 
 __author__ = 'Brent Lambert, David Ray, Jon Thomas'
 __copyright__ = 'Copyright 2011, enPraxis LLC'
@@ -173,9 +173,9 @@ class BBReader(object):
     def getDocumentHrefLinks(self, soup):
         links = []
         tags = soup.findAll(href=True)
-        from urlparse import urlparse
+        from urllib.parse import urlparse
         for tag in tags:
-            if tag.has_key('href'):
+            if 'href' in tag:
                 url = urlparse('href')
                 if not url[1] or 'localhost' in url[1]:
                     links.append(tag)
@@ -184,9 +184,9 @@ class BBReader(object):
     def getDocumentSrcLinks(self, soup):
         links = []
         tags = soup.findAll(src=True)
-        from urlparse import urlparse
+        from urllib.parse import urlparse
         for tag in tags:
-            if tag.has_key('src'):
+            if 'src' in tag:
                 url = urlparse('src')
                 if not url[1] or 'localhost' in url[1]:
                     links.append(tag)
@@ -230,8 +230,8 @@ class BBReader(object):
     def _convertURLEntities(self, link):
         """ Convert url entities """
         lnk = link
-        import urllib
-        lnk = urllib.unquote(lnk)
+        import urllib.request, urllib.parse, urllib.error
+        lnk = urllib.parse.unquote(lnk)
         return lnk
 
     def _convertToNormalizedLink(self, link, utils):
@@ -245,7 +245,7 @@ class BBReader(object):
         
     def filterDocumentLink(self, link, utils, vars, base):
         lnk = link
-        from urlparse import urlparse
+        from urllib.parse import urlparse
         lnk = self._convertURLEntities(lnk)
         url = urlparse(lnk)
         if url[2] and not url[0]:
@@ -286,14 +286,14 @@ def convertHTMLEntity(text):
         except ValueError:
             return '&#%s;' % text.group(2)
     try:
-        return htmlentitydefs.entitydefs[text.group(2)]
+        return html.entities.entitydefs[text.group(2)]
     except KeyError:
         return '&%s;' % text.group(2)
 
 def unquoteHTML(text):
     """Convert an HTML quoted string into normal string.
     Works with &#XX; and with &nbsp; &gt; etc."""
-    if type(u'') == type(text):
+    if type('') == type(text):
         text = text.encode('utf-8')
     return re.sub(r'&(#?)(.+?);',convertHTMLEntity,text)
             
