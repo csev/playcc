@@ -43,17 +43,20 @@ class IMSCCReader(IMSReader):
     """ Class for reading IMS CC packages """
 
     def readPackage(self, zf, objManager):
+        print('readPackage')
         objDict = {}
         ccreader = CCReader()
         manifest = self.readManifest(zf)
         if not manifest:
             raise ManifestError('Could not locate manifest file.')
         doc = ccreader.parseManifest(manifest)
+        print(doc)
         objDict['package'] = {}
         orgs = ccreader.readOrganizations(doc)
         resources = ccreader.readResources(doc)
         for x in resources:
             resid, restype, reshref = ccreader.readResourceAttributes(x)
+            print(resid, restype, reshref)
             metadata = ccreader.readMetadata(x)
             files = ccreader.readFiles(x)
             # If the type is a link

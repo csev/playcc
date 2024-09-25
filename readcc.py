@@ -10,8 +10,10 @@ class MyObjectManager(BaseObjectManager):
     def createObject(self, objDict, zf):
         """ Step through object metadata and create objects. """
 
+        print('createObject')
         for oid in objDict:
             data = objDict[oid]
+            print(oid, data)
             if 'package' == oid:
                 pass # This is package metadata
             elif 'Document' == data['type']:
@@ -27,7 +29,7 @@ class MyObjectManager(BaseObjectManager):
 
 
 nom = MyObjectManager()
-format = readers[0]
+format = readers[0][0]
 try:
     za = ZipFile('sakai-export.imscc', 'r')
 except BadZipFile as e:
